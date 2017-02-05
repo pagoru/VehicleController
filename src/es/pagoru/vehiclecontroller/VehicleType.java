@@ -5,17 +5,17 @@ package es.pagoru.vehiclecontroller;
  */
 public enum VehicleType {
 
-    LAND('T'),
-    AERIAL('A'),
-    MARITIME('M');
-
-    private char c;
-
-    VehicleType(char c) {
-        this.c = c;
+    T("terrestre"), //Land
+    A("aeri"), //Aerial
+    M("maritim"); //Maritime
+    
+    private String text;
+    
+    VehicleType(String text){
+        this.text = text;
     }
 
-    public char getCharacter() {
-        return c;
+    public String getText() {
+        return text;
     }
 }

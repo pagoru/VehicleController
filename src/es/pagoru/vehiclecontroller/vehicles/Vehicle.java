@@ -7,12 +7,14 @@ import es.pagoru.vehiclecontroller.VehicleType;
  */
 public class Vehicle {
 
+    private VehicleType vehicle_type;
+    private String identifier;
+    
     private double min_consumption;
     private double current_charge;
     private double max_capacity;
+    
     private double km_consumption;
-    private VehicleType vehicle_type;
-    private String identifier;
     private double average_speed;
     private String driver_identifier;
 

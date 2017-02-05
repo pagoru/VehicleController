@@ -13,5 +13,10 @@ public enum VehicleController {
     INSTANCE;
 
     private List<Vehicle> vehicle_list = new ArrayList<>();
+    
+    public void addVehicle(Vehicle vehicle){
+        if(vehicle != null)
+        vehicle_list.add(vehicle);
+    }
 
 }

@@ -1,7 +1,7 @@
 package es.pagoru.vehiclecontroller.vehicles.builders;
 
-import es.pagoru.vehiclecontroller.vehicles.AerialVehicle;
 import es.pagoru.vehiclecontroller.vehicles.MaritimeVehicle;
+import es.pagoru.vehiclecontroller.vehicles.Vehicle;
 
 import java.util.Date;
 
@@ -16,6 +16,19 @@ public class MaritimeVehicleBuilder extends VehicleBuilder {
     private Date building_date;
 
     public MaritimeVehicleBuilder() { }
+
+    public MaritimeVehicleBuilder(Vehicle vehicle){
+        vehicle_type(vehicle.getVehicle_type());
+        identifier(vehicle.getIdentifier());
+
+        min_consumption(vehicle.getMin_consumption());
+        current_charge(vehicle.getCurrent_charge());
+        max_capacity(vehicle.getMax_capacity());
+
+        km_consumption(vehicle.getKm_consumption());
+        average_speed(vehicle.getAverage_speed());
+        driver_identifier(vehicle.getDriver_identifier());
+    }
 
     public MaritimeVehicleBuilder length(int length) {
         this.length = length;
@@ -37,7 +50,7 @@ public class MaritimeVehicleBuilder extends VehicleBuilder {
         return this;
     }
 
-    public MaritimeVehicle buildAerialVehicle() {
+    public MaritimeVehicle buildMaritimeVehicle() {
         return new MaritimeVehicle(
                 buildVehicle(),
                 length,

@@ -1,7 +1,7 @@
 package es.pagoru.vehiclecontroller.vehicles.builders;
 
-import es.pagoru.vehiclecontroller.vehicles.AerialVehicle;
 import es.pagoru.vehiclecontroller.vehicles.LandVehicle;
+import es.pagoru.vehiclecontroller.vehicles.Vehicle;
 
 /**
  * Created by pablo on 3/2/17.
@@ -13,6 +13,19 @@ public class LandVehicleBuilder extends VehicleBuilder {
     private int price_failures;
 
     public LandVehicleBuilder() { }
+    
+    public LandVehicleBuilder(Vehicle vehicle){
+        vehicle_type(vehicle.getVehicle_type());
+        identifier(vehicle.getIdentifier());
+        
+        min_consumption(vehicle.getMin_consumption());
+        current_charge(vehicle.getCurrent_charge());
+        max_capacity(vehicle.getMax_capacity());
+        
+        km_consumption(vehicle.getKm_consumption());
+        average_speed(vehicle.getAverage_speed());
+        driver_identifier(vehicle.getDriver_identifier());
+    }
 
     public LandVehicleBuilder horse_power(int horse_power) {
         this.horse_power = horse_power;
