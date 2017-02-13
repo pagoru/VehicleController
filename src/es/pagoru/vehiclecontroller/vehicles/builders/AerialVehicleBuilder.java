@@ -11,7 +11,18 @@ public class AerialVehicleBuilder extends VehicleBuilder {
     private int motors;
     private int running_time;
 
-    public AerialVehicleBuilder() { }
+    public AerialVehicleBuilder(Vehicle vehicle){
+        vehicle_type(vehicle.getVehicle_type());
+        identifier(vehicle.getIdentifier());
+
+        min_consumption(vehicle.getMin_consumption());
+        current_charge(vehicle.getCurrent_charge());
+        max_capacity(vehicle.getMax_capacity());
+
+        km_consumption(vehicle.getKm_consumption());
+        average_speed(vehicle.getAverage_speed());
+        driver_identifier(vehicle.getDriver_identifier());
+    }
 
     public AerialVehicleBuilder motors(int motors) {
         this.motors = motors;

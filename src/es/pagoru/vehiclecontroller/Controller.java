@@ -1,12 +1,13 @@
 package es.pagoru.vehiclecontroller;
 
+import es.pagoru.vehiclecontroller.vehicles.AerialVehicle;
 import es.pagoru.vehiclecontroller.vehicles.LandVehicle;
 import es.pagoru.vehiclecontroller.vehicles.MaritimeVehicle;
 import es.pagoru.vehiclecontroller.vehicles.Vehicle;
-import es.pagoru.vehiclecontroller.vehicles.builders.LandVehicleBuilder;
-import es.pagoru.vehiclecontroller.vehicles.builders.MaritimeVehicleBuilder;
-import es.pagoru.vehiclecontroller.vehicles.builders.VehicleBuilder;
+import es.pagoru.vehiclecontroller.vehicles.builders.*;
+import es.pagoru.vehiclecontroller.vehicles.builders.AerialVehicleBuilder;
 
+import java.sql.Date;
 import java.util.Scanner;
 
 /**
@@ -193,11 +194,6 @@ public class Controller {
 
         return false;
     }
-    /***OPTION_A*************************************************************************************************/
-    private boolean option_A(){
-
-        return false;
-    }
     /***OPTION_M*************************************************************************************************/
     private boolean option_M(){
         return addVehicle(getMaritimeVehicle());
@@ -211,10 +207,44 @@ public class Controller {
 
         MaritimeVehicleBuilder maritimeVehicleBuilder  = new MaritimeVehicleBuilder(vehicle);
 
+        try{
+            System.out.println("Escriu l'eslora del vehicle:");
+            maritimeVehicleBuilder.length(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        try{
+            System.out.println("Escriu la manega del vehicle:");
+            maritimeVehicleBuilder.hose(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        try{
+            System.out.println("Escriu l'any de floatció del vehicle:");
+            maritimeVehicleBuilder.flotation_year(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        try{
+            System.out.println("Escriu la data de construcció del vehicle:");
+            maritimeVehicleBuilder.building_date(Date.valueOf(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit una data valida yyyy-mm-dd.");
+            wait(3);
+            return null;
+        }
 
         return maritimeVehicleBuilder.buildMaritimeVehicle();
     }
-
 
     /***OPTION_T*************************************************************************************************/
     private boolean option_T(){
@@ -258,7 +288,41 @@ public class Controller {
 
         return landVehicleBuilder.buildLandVehicle();
     }
-    
+
+    /***OPTION_A*************************************************************************************************/
+    private boolean option_A(){
+        return addVehicle(getAerialVehicle());
+    }
+
+    private AerialVehicle getAerialVehicle(){
+        Vehicle vehicle = getVehicle(VehicleType.T);
+        if(vehicle == null){
+            return null;
+        }
+
+        AerialVehicleBuilder aerialVehicleBuilder  = new AerialVehicleBuilder(vehicle);
+
+        try{
+            System.out.println("Escriu el nombre de motors que te el vehicle:");
+            aerialVehicleBuilder.motors(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        try{
+            System.out.println("Escriu el nombre de hores que porta funcionant el vehicle:");
+            aerialVehicleBuilder.motors(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        return aerialVehicleBuilder.buildAerialVehicle();
+    }
+
     /***OPTION_F*************************************************************************************************/
     private boolean option_F() {
         System.out.println("Bye bye, hasta otro ratito.");
