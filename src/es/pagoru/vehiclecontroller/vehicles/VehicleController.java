@@ -1,6 +1,4 @@
-package es.pagoru.vehiclecontroller;
-
-import es.pagoru.vehiclecontroller.vehicles.Vehicle;
+package es.pagoru.vehiclecontroller.vehicles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +15,10 @@ public enum VehicleController {
     public void addVehicle(Vehicle vehicle){
         if(vehicle != null)
         vehicle_list.add(vehicle);
+    }
+    
+    public List<Vehicle> getVehicle_list(){
+        return vehicle_list;
     }
 
 }

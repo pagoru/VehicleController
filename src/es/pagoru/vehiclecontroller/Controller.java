@@ -1,9 +1,7 @@
 package es.pagoru.vehiclecontroller;
 
-import es.pagoru.vehiclecontroller.vehicles.AerialVehicle;
-import es.pagoru.vehiclecontroller.vehicles.LandVehicle;
-import es.pagoru.vehiclecontroller.vehicles.MaritimeVehicle;
-import es.pagoru.vehiclecontroller.vehicles.Vehicle;
+import es.pagoru.vehiclecontroller.persons.PersonController;
+import es.pagoru.vehiclecontroller.vehicles.*;
 import es.pagoru.vehiclecontroller.vehicles.builders.*;
 import es.pagoru.vehiclecontroller.vehicles.builders.AerialVehicleBuilder;
 
@@ -25,6 +23,8 @@ public class Controller {
         this.scanner = new Scanner(System.in);
         this.main_loop = true;
 
+        PersonController.INSTANCE.load();
+        
         mainLoop();
     }
 
@@ -179,21 +179,49 @@ public class Controller {
         return false;
     }
 
-    /***OPTION_R*************************************************************************************************/
-    private boolean option_R(){
-
-        return false;
+    /***OPTION_T*************************************************************************************************/
+    private boolean option_T(){
+        return addVehicle(getLandVehicle());
     }
-    /***OPTION_P*************************************************************************************************/
-    private boolean option_P(){
 
-        return false;
-    }
-    /***OPTION_C*************************************************************************************************/
-    private boolean option_C(){
+    private LandVehicle getLandVehicle(){
+        Vehicle vehicle = getVehicle(VehicleType.T);
+        if(vehicle == null){
+            return null;
+        }
 
-        return false;
+        LandVehicleBuilder landVehicleBuilder  = new LandVehicleBuilder(vehicle);
+
+        try{
+            System.out.println("Escriu els caballs del vehicle:");
+            landVehicleBuilder.horse_power(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        try{
+            System.out.println("Escriu el numero total de reparacions que ha tingut el vehicle:");
+            landVehicleBuilder.failures(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        try{
+            System.out.println("Escriu el preu total de les reparacions que ha tingut el vehicle:");
+            landVehicleBuilder.price_failures(Integer.parseInt(scanner.next()));
+        } catch (Exception e){
+            System.err.println("No s'ha introduit un enter valid.");
+            wait(3);
+            return null;
+        }
+
+        return landVehicleBuilder.buildLandVehicle();
     }
+    
     /***OPTION_M*************************************************************************************************/
     private boolean option_M(){
         return addVehicle(getMaritimeVehicle());
@@ -246,49 +274,6 @@ public class Controller {
         return maritimeVehicleBuilder.buildMaritimeVehicle();
     }
 
-    /***OPTION_T*************************************************************************************************/
-    private boolean option_T(){
-        return addVehicle(getLandVehicle());
-    }
-
-    private LandVehicle getLandVehicle(){
-        Vehicle vehicle = getVehicle(VehicleType.T);
-        if(vehicle == null){
-            return null;
-        }
-        
-        LandVehicleBuilder landVehicleBuilder  = new LandVehicleBuilder(vehicle);
-
-        try{
-            System.out.println("Escriu els caballs del vehicle:");
-            landVehicleBuilder.horse_power(Integer.parseInt(scanner.next()));
-        } catch (Exception e){
-            System.err.println("No s'ha introduit un enter valid.");
-            wait(3);
-            return null;
-        }
-
-        try{
-            System.out.println("Escriu el numero total de reparacions que ha tingut el vehicle:");
-            landVehicleBuilder.failures(Integer.parseInt(scanner.next()));
-        } catch (Exception e){
-            System.err.println("No s'ha introduit un enter valid.");
-            wait(3);
-            return null;
-        }
-
-        try{
-            System.out.println("Escriu el preu total de les reparacions que ha tingut el vehicle:");
-            landVehicleBuilder.price_failures(Integer.parseInt(scanner.next()));
-        } catch (Exception e){
-            System.err.println("No s'ha introduit un enter valid.");
-            wait(3);
-            return null;
-        }
-
-        return landVehicleBuilder.buildLandVehicle();
-    }
-
     /***OPTION_A*************************************************************************************************/
     private boolean option_A(){
         return addVehicle(getAerialVehicle());
@@ -323,6 +308,76 @@ public class Controller {
         return aerialVehicleBuilder.buildAerialVehicle();
     }
 
+    /***OPTION_C*************************************************************************************************/
+    private boolean option_C(){
+        PersonController.INSTANCE.getPerson_list().forEach(p -> {
+            System.out.println("|-----------------------------------|");
+            System.out.println("Nif -> " + p.getNif());
+            System.out.println("Nom -> " + p.getName());
+            System.out.println("Cumpleanys -> " + p.getBirthday());
+            System.out.println("Especialitat -> " + p.getVehicle_specialty().getText());
+            System.out.println("Esta asignat -> " + (p.isAssigned() ? "Si" : "No"));
+        });
+        System.out.println("|-----------------------------------|");
+        wait(5);
+        return false;
+    }
+    
+    /***OPTION_P*************************************************************************************************/
+    private boolean option_P(){
+
+        return false;
+    }
+    
+    /***OPTION_R*************************************************************************************************/
+    private boolean option_R(){
+        printPageBreak();
+        if(VehicleController.INSTANCE.getVehicle_list().size() == 0)
+            return false;
+            
+        VehicleController.INSTANCE.getVehicle_list().forEach(vehicle -> {
+            System.out.println("|-----------------------------------|");
+            System.out.println("Identificador -> " + vehicle.getIdentifier());
+            System.out.println("Consum minim -> " + vehicle.getMin_consumption());
+            System.out.println("Consum actual -> " + vehicle.getCurrent_charge());
+            System.out.println("Maxima capacitat -> " + vehicle.getMax_capacity());
+            System.out.println("Consum per km -> " + vehicle.getKm_consumption());
+            System.out.println("Velocitat mitja -> " + vehicle.getAverage_speed());
+            System.out.println("Identificador del conductor -> " + vehicle.getDriver_identifier());
+            
+            System.out.println("Tipus de vehicle -> " + vehicle.getVehicle_type().getText());
+            System.out.println("          |-|-|-|-|-|");
+            
+            switch (vehicle.getVehicle_type()){
+                case A:
+                    AerialVehicle aerialVehicle = (AerialVehicle) vehicle;
+
+                    System.out.println("Motors -> " + aerialVehicle.getMotors());
+                    System.out.println("Temps en marcha -> " + aerialVehicle.getRunning_time());
+                    break;
+                case M:
+                    MaritimeVehicle maritimeVehicle = (MaritimeVehicle) vehicle;
+
+                    System.out.println("Eslora -> " + maritimeVehicle.getLength());
+                    System.out.println("Manega -> " + maritimeVehicle.getHose());
+                    System.out.println("Any de flotacio -> " + maritimeVehicle.getFlotation_year());
+                    System.out.println("Data de fabricació -> " + maritimeVehicle.getBuilding_date());
+                    break;
+                case T:
+                    LandVehicle landVehicle = (LandVehicle) vehicle;
+
+                    System.out.println("Caballs -> " + landVehicle.getHorse_power());
+                    System.out.println("Quantitat d'averies -> " + landVehicle.getFailures());
+                    System.out.println("Preu de les reparacions -> " + landVehicle.getPrice_failures());
+                    break;
+            }
+        });
+        System.out.println("|-----------------------------------|");
+        wait(5);
+        
+        return false;
+    }
+
     /***OPTION_F*************************************************************************************************/
     private boolean option_F() {
         System.out.println("Bye bye, hasta otro ratito.");
@@ -331,7 +386,7 @@ public class Controller {
         return true;
     }
 
-    /***OPTION_D*************************************************************************************************/
+    /***OPTION_Default********************************************************************************************/
     private boolean option_default(){
         printPageBreak();
         System.out.println("Opció incorrecta.");

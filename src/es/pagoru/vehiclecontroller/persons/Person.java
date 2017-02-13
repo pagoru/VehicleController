@@ -1,4 +1,6 @@
-package es.pagoru.vehiclecontroller;
+package es.pagoru.vehiclecontroller.persons;
+
+import es.pagoru.vehiclecontroller.VehicleType;
 
 import java.util.Date;
 
@@ -13,6 +15,9 @@ public class Person {
     private VehicleType vehicle_specialty;
     private boolean assigned;
 
+    public Person() {
+        setAssigned(false);
+    }
 
     public Person(String nif,
                   String name,
