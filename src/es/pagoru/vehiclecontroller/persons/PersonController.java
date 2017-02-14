@@ -74,5 +74,20 @@ public enum PersonController {
 
         return person;
     }
+
+    public Person getPerson(String nif){
+        return getPerson_list().stream().filter(p
+                -> p.getNif().equalsIgnoreCase(nif)).findFirst().orElse(null);
+    }
+
+    public void assignPerson(String nif, boolean assigned){
+        getPerson_list().stream().filter(p -> p.getNif().equalsIgnoreCase(nif))
+                .forEach(p -> p.setAssigned(assigned));
+    }
+
+    public boolean isPersonReal(String nif){
+        return getPerson_list().stream().filter(p
+                -> p.getNif().equalsIgnoreCase(nif)).count() != 0;
+    }
     
 }

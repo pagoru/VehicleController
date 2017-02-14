@@ -1,9 +1,8 @@
 package es.pagoru.vehiclecontroller;
 
+import es.pagoru.vehiclecontroller.persons.Person;
 import es.pagoru.vehiclecontroller.persons.PersonController;
 import es.pagoru.vehiclecontroller.vehicles.*;
-import es.pagoru.vehiclecontroller.vehicles.builders.*;
-import es.pagoru.vehiclecontroller.vehicles.builders.AerialVehicleBuilder;
 
 import java.sql.Date;
 import java.util.Scanner;
@@ -95,16 +94,21 @@ public class Controller {
         }
     }
 
-    private Vehicle getVehicle(VehicleType vehicleType){
-        VehicleBuilder vehicleBuilder = new VehicleBuilder();
-
+    private Vehicle getVehicle(VehicleType vehicleType, Vehicle vehicle){
         printPageBreak();
 
-        vehicleBuilder.vehicle_type(vehicleType);
+        vehicle.setVehicle_type(vehicleType);
 
         try{
             System.out.println("Escriu l'identificador del vehicle:");
-            vehicleBuilder.identifier(scanner.next());
+            String id = scanner.next();
+            if(VehicleController.INSTANCE.isIdentifierInUse(id)){
+                System.err.println("Aquest identificador ja esta en us.");
+                wait(3);
+                return null;
+            }
+
+            vehicle.setIdentifier(id);
         } catch (Exception e){
             System.err.println(e.getMessage());
             wait(3);
@@ -113,7 +117,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu el consum minim del vehicle:");
-            vehicleBuilder.min_consumption(Double.parseDouble(scanner.next()));
+            vehicle.setMin_consumption(Double.parseDouble(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un decimal valid.");
             wait(3);
@@ -122,7 +126,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu la carrega actual del vehicle:");
-            vehicleBuilder.current_charge(Double.parseDouble(scanner.next()));
+            vehicle.setCurrent_charge(Double.parseDouble(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un decimal valid.");
             wait(3);
@@ -131,7 +135,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu la carrega maxima del vehicle:");
-            vehicleBuilder.max_capacity(Double.parseDouble(scanner.next()));
+            vehicle.setMax_capacity(Double.parseDouble(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un decimal valid.");
             wait(3);
@@ -140,7 +144,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu la el consum per km del vehicle:");
-            vehicleBuilder.km_consumption(Double.parseDouble(scanner.next()));
+            vehicle.setKm_consumption(Double.parseDouble(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un decimal valid.");
             wait(3);
@@ -149,23 +153,14 @@ public class Controller {
 
         try{
             System.out.println("Escriu la velocitat mitja del vehicle:");
-            vehicleBuilder.average_speed(Double.parseDouble(scanner.next()));
+            vehicle.setAverage_speed(Double.parseDouble(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un decimal valid.");
             wait(3);
             return null;
         }
 
-        try{
-            System.out.println("Escriu l'identificador del conductor del vehicle:");
-            vehicleBuilder.driver_identifier(scanner.next());
-        } catch (Exception e){
-            System.err.println(e.getMessage());
-            wait(3);
-            return null;
-        }
-
-        return vehicleBuilder.buildVehicle();
+        return vehicle;
     }
     
     private boolean addVehicle(Vehicle vehicle){
@@ -185,16 +180,14 @@ public class Controller {
     }
 
     private LandVehicle getLandVehicle(){
-        Vehicle vehicle = getVehicle(VehicleType.T);
-        if(vehicle == null){
+        LandVehicle landVehicle = (LandVehicle) getVehicle(VehicleType.T, new LandVehicle());
+        if(landVehicle == null){
             return null;
         }
 
-        LandVehicleBuilder landVehicleBuilder  = new LandVehicleBuilder(vehicle);
-
         try{
             System.out.println("Escriu els caballs del vehicle:");
-            landVehicleBuilder.horse_power(Integer.parseInt(scanner.next()));
+            landVehicle.setHorse_power(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
@@ -203,7 +196,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu el numero total de reparacions que ha tingut el vehicle:");
-            landVehicleBuilder.failures(Integer.parseInt(scanner.next()));
+            landVehicle.setFailures(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
@@ -212,14 +205,14 @@ public class Controller {
 
         try{
             System.out.println("Escriu el preu total de les reparacions que ha tingut el vehicle:");
-            landVehicleBuilder.price_failures(Integer.parseInt(scanner.next()));
+            landVehicle.setPrice_failures(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
             return null;
         }
 
-        return landVehicleBuilder.buildLandVehicle();
+        return landVehicle;
     }
     
     /***OPTION_M*************************************************************************************************/
@@ -228,16 +221,14 @@ public class Controller {
     }
 
     private MaritimeVehicle getMaritimeVehicle(){
-        Vehicle vehicle = getVehicle(VehicleType.T);
-        if(vehicle == null){
+        MaritimeVehicle maritimeVehicle = (MaritimeVehicle) getVehicle(VehicleType.T, new MaritimeVehicle());
+        if(maritimeVehicle == null){
             return null;
         }
 
-        MaritimeVehicleBuilder maritimeVehicleBuilder  = new MaritimeVehicleBuilder(vehicle);
-
         try{
             System.out.println("Escriu l'eslora del vehicle:");
-            maritimeVehicleBuilder.length(Integer.parseInt(scanner.next()));
+            maritimeVehicle.setLength(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
@@ -246,7 +237,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu la manega del vehicle:");
-            maritimeVehicleBuilder.hose(Integer.parseInt(scanner.next()));
+            maritimeVehicle.setHose(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
@@ -255,7 +246,7 @@ public class Controller {
 
         try{
             System.out.println("Escriu l'any de floatció del vehicle:");
-            maritimeVehicleBuilder.flotation_year(Integer.parseInt(scanner.next()));
+            maritimeVehicle.setFlotation_year(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
@@ -264,14 +255,14 @@ public class Controller {
 
         try{
             System.out.println("Escriu la data de construcció del vehicle:");
-            maritimeVehicleBuilder.building_date(Date.valueOf(scanner.next()));
+            maritimeVehicle.setBuilding_date(Date.valueOf(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit una data valida yyyy-mm-dd.");
             wait(3);
             return null;
         }
 
-        return maritimeVehicleBuilder.buildMaritimeVehicle();
+        return maritimeVehicle;
     }
 
     /***OPTION_A*************************************************************************************************/
@@ -280,16 +271,14 @@ public class Controller {
     }
 
     private AerialVehicle getAerialVehicle(){
-        Vehicle vehicle = getVehicle(VehicleType.T);
-        if(vehicle == null){
+        AerialVehicle aerialVehicle = (AerialVehicle) getVehicle(VehicleType.T, new AerialVehicle());
+        if(aerialVehicle == null){
             return null;
         }
 
-        AerialVehicleBuilder aerialVehicleBuilder  = new AerialVehicleBuilder(vehicle);
-
         try{
             System.out.println("Escriu el nombre de motors que te el vehicle:");
-            aerialVehicleBuilder.motors(Integer.parseInt(scanner.next()));
+            aerialVehicle.setMotors(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
@@ -298,14 +287,14 @@ public class Controller {
 
         try{
             System.out.println("Escriu el nombre de hores que porta funcionant el vehicle:");
-            aerialVehicleBuilder.motors(Integer.parseInt(scanner.next()));
+            aerialVehicle.setRunning_time(Integer.parseInt(scanner.next()));
         } catch (Exception e){
             System.err.println("No s'ha introduit un enter valid.");
             wait(3);
             return null;
         }
 
-        return aerialVehicleBuilder.buildAerialVehicle();
+        return aerialVehicle;
     }
 
     /***OPTION_C*************************************************************************************************/
@@ -325,7 +314,29 @@ public class Controller {
     
     /***OPTION_P*************************************************************************************************/
     private boolean option_P(){
+        printPageBreak();
 
+        System.out.println("Escriu l'identificador de la persona:");
+        String person_nif = scanner.next();
+        if(!PersonController.INSTANCE.isPersonReal(person_nif)){
+            System.err.println("Aquest identificador de  persona no esta registrat.");
+            wait(3);
+            return false;
+        }
+
+        System.out.println("Escriu l'identificador del vehicle:");
+        String vehicle_id = scanner.next();
+        if(!VehicleController.INSTANCE.isIdentifierInUse(vehicle_id)){
+            System.err.println("Aquest identificador de  vehicle no esta registrat.");
+            wait(3);
+            return false;
+        }
+
+        PersonController.INSTANCE.assignPerson(person_nif, true);
+        VehicleController.INSTANCE.assignPersonToVehicle(vehicle_id, person_nif);
+
+        System.out.println("S'ha assignat a [" + person_nif + "] al vehicle [" + vehicle_id + "]");
+        wait(3);
         return false;
     }
     
@@ -344,31 +355,32 @@ public class Controller {
             System.out.println("Consum per km -> " + vehicle.getKm_consumption());
             System.out.println("Velocitat mitja -> " + vehicle.getAverage_speed());
             System.out.println("Identificador del conductor -> " + vehicle.getDriver_identifier());
-            
+
+            System.out.println("Consum => " + vehicle.getConsumption());
+
             System.out.println("Tipus de vehicle -> " + vehicle.getVehicle_type().getText());
-            System.out.println("          |-|-|-|-|-|");
             
             switch (vehicle.getVehicle_type()){
                 case A:
                     AerialVehicle aerialVehicle = (AerialVehicle) vehicle;
 
-                    System.out.println("Motors -> " + aerialVehicle.getMotors());
-                    System.out.println("Temps en marcha -> " + aerialVehicle.getRunning_time());
+                    System.out.println("[] Motors -> " + aerialVehicle.getMotors());
+                    System.out.println("[] Temps en marcha -> " + aerialVehicle.getRunning_time());
                     break;
                 case M:
                     MaritimeVehicle maritimeVehicle = (MaritimeVehicle) vehicle;
 
-                    System.out.println("Eslora -> " + maritimeVehicle.getLength());
-                    System.out.println("Manega -> " + maritimeVehicle.getHose());
-                    System.out.println("Any de flotacio -> " + maritimeVehicle.getFlotation_year());
-                    System.out.println("Data de fabricació -> " + maritimeVehicle.getBuilding_date());
+                    System.out.println("[] Eslora -> " + maritimeVehicle.getLength());
+                    System.out.println("[] Manega -> " + maritimeVehicle.getHose());
+                    System.out.println("[] Any de flotacio -> " + maritimeVehicle.getFlotation_year());
+                    System.out.println("[] Data de fabricació -> " + maritimeVehicle.getBuilding_date());
                     break;
                 case T:
                     LandVehicle landVehicle = (LandVehicle) vehicle;
 
-                    System.out.println("Caballs -> " + landVehicle.getHorse_power());
-                    System.out.println("Quantitat d'averies -> " + landVehicle.getFailures());
-                    System.out.println("Preu de les reparacions -> " + landVehicle.getPrice_failures());
+                    System.out.println("[] Caballs -> " + landVehicle.getHorse_power());
+                    System.out.println("[] Quantitat d'averies -> " + landVehicle.getFailures());
+                    System.out.println("[] Preu de les reparacions -> " + landVehicle.getPrice_failures());
                     break;
             }
         });
