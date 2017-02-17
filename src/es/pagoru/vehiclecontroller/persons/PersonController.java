@@ -81,13 +81,11 @@ public enum PersonController {
     }
 
     public void assignPerson(String nif, boolean assigned){
-        getPerson_list().stream().filter(p -> p.getNif().equalsIgnoreCase(nif))
-                .forEach(p -> p.setAssigned(assigned));
+        getPerson(nif).setAssigned(assigned);
     }
 
     public boolean isPersonReal(String nif){
-        return getPerson_list().stream().filter(p
-                -> p.getNif().equalsIgnoreCase(nif)).count() != 0;
+        return getPerson(nif) != null;
     }
     
 }

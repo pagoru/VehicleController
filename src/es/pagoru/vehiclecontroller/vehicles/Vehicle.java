@@ -7,6 +7,15 @@ import es.pagoru.vehiclecontroller.VehicleType;
  */
 public abstract class Vehicle {
 
+    protected VehicleType vehicle_type;
+    protected String identifier;
+    protected double min_consumption;
+    protected double current_charge;
+    protected double max_capacity;
+    protected double km_consumption;
+    protected double average_speed;
+    protected String driver_identifier;
+
     public abstract void setVehicle_type(VehicleType vehicle_type);
     public abstract void setIdentifier(String identifier);
     public abstract void setMin_consumption(double min_consumption);

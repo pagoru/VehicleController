@@ -22,8 +22,7 @@ public enum VehicleController {
     }
 
     public boolean isIdentifierInUse(String identifier){
-        return vehicle_list.stream().filter(v -> v.getIdentifier()
-                .equalsIgnoreCase(identifier)).count() != 0;
+        return getVehicle(identifier) != null;
     }
 
     public Vehicle getVehicle(String identifier){
@@ -32,8 +31,7 @@ public enum VehicleController {
     }
 
     public void assignPersonToVehicle(String identifier, String person_identifier){
-        getVehicle_list().stream().filter(v -> v.getIdentifier().equalsIgnoreCase(identifier))
-                .forEach(v -> v.setDriver_identifier(person_identifier));
+        getVehicle(identifier).setDriver_identifier(person_identifier);
     }
 
 }

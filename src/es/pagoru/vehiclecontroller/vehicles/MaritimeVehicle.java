@@ -9,15 +9,6 @@ import java.util.Date;
  */
 public class MaritimeVehicle extends Vehicle {
 
-    private VehicleType vehicle_type;
-    private String identifier;
-    private double min_consumption;
-    private double current_charge;
-    private double max_capacity;
-    private double km_consumption;
-    private double average_speed;
-    private String driver_identifier;
-
     private int length;
     private int hose;
     private int flotation_year;
