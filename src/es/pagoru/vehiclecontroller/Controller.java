@@ -221,7 +221,7 @@ public class Controller {
     }
 
     private MaritimeVehicle getMaritimeVehicle(){
-        MaritimeVehicle maritimeVehicle = (MaritimeVehicle) getVehicle(VehicleType.T, new MaritimeVehicle());
+        MaritimeVehicle maritimeVehicle = (MaritimeVehicle) getVehicle(VehicleType.M, new MaritimeVehicle());
         if(maritimeVehicle == null){
             return null;
         }
@@ -271,7 +271,7 @@ public class Controller {
     }
 
     private AerialVehicle getAerialVehicle(){
-        AerialVehicle aerialVehicle = (AerialVehicle) getVehicle(VehicleType.T, new AerialVehicle());
+        AerialVehicle aerialVehicle = (AerialVehicle) getVehicle(VehicleType.A, new AerialVehicle());
         if(aerialVehicle == null){
             return null;
         }
